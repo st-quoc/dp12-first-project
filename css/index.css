@@ -30,16 +30,6 @@ a {
 img {
   display: block;
   max-width: 100%;
-<<<<<<< HEAD
-=======
-}
-body {
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-  background-color: #f5f5f5;
->>>>>>> 35d6244d4ef2bf44732b279fb5183ccac7021c40
 }
 
 /* general */
@@ -76,7 +66,6 @@ body {
   border: 15px solid #000000; 
 }
 
-<<<<<<< HEAD
 
 .header-top h1 {
   margin: 0; 
@@ -146,10 +135,6 @@ body {
   padding: 20px;              
 }
 
-=======
-/* header */
-/* code here */
->>>>>>> 35d6244d4ef2bf44732b279fb5183ccac7021c40
 
 .quiz-box {
   width: 600px;       
