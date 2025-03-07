@@ -3,22 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Quiz AI Generate with Gemini" />
-    <meta name="keywords" content="AI Generate, Free, Quiz," />
-    <meta name="author" content="DP12-First-Project" />
-    <meta name="robots" content="index, follow" />
     <title>Quiz AI Generate with Gemini</title>
-
-    <link rel="stylesheet" href="../css/index.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/index.css" />
   </head>
 
   <body>
     <!-- header -->
     <header>
-      <!-- code here -->
+      <div class="header-top">
+        <div class="ai-logo">
+          <img src="image/ai.webp" alt="Ảnh AI" />
+        </div>
+        <div class="header-content">
+          <h1>Generate a quiz from any subject</h1>         
+          <button id="generate-btn">Generate</button>
+        </div>
+      </div>
+      <div class="header-bottom">
+        <div class="separator">
+          <span>Example subject</span>
+        </div>
+        <div class="sample-quizzes">
+          <div class="quiz-box">
+            <img src="image/toan.jpeg" alt="Chủ đề toántoán" class="image-effect"/>
+          </div>
+          <div class="quiz-box">
+            <img src="image/eng.jpg" alt="Chủ đề tiếng anhanh" class="image-effect"/>
+          </div>
+          <div class="quiz-box">
+            <img src="image/html.jpg" alt="Chủ đề HTML" class="image-effect"/>
+          </div>
+        </div>
+      </div>
     </header>
     <!-- end header -->
 
@@ -35,7 +51,7 @@
       <div id="result"></div>
 
     </main>
-    <!-- end main -->
+    <!--   end main   -->
 
     <!-- footer -->
     <footer>
