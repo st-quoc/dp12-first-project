@@ -3,36 +3,57 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz AI Generate with Gemini</title>
+    <title>Quiz Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- header -->
-    <header>
-        <!-- code here -->
-    </header>
-    <!-- end header -->
+<h1>Quiz Generator</h1>
+<label for="topicInput">Chủ đề:</label>
+<input type="text" id="topicInput" placeholder="Nhập chủ đề...">
 
-    <!-- main -->
-    <main>
-        <!-- code here -->
-    </main>
-    <!-- end main -->
+<label for="questionCountInput">Số lượng câu hỏi:</label>
+<input type="number" id="questionCountInput" placeholder="Nhập số lượng câu hỏi (tối đa 10)" min="1" max="10">
+<button onclick="generateQuiz()">Tạo đề</button>
+<div id="result"></div>
+
+<!-- header -->
+<header>
+    <!-- code here -->
+</header>
+<!-- end header -->
+
+<!-- main -->
+<main>
+    <!-- code here -->
+</main>
+<!-- end main -->
 
 
+<!-- footer -->
+<footer>
+    <!-- code here -->
+</footer>
+<!-- end footer -->
 
-    <!-- footer -->
-    <footer>
-        <!-- code here -->
-    </footer>
-    <!-- end footer -->
 
-
-    
-    <!-- script -->
-    <script src=""></script>
-    <!-- end script -->
+<!-- script -->
+<script src="js/app.js"></script>
+<!-- end script -->
 
 </body>
 
