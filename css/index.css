@@ -56,7 +56,6 @@ body {
     transparent 1px,            /* chuyển sang trong suốt sau 1px */
     transparent 10px            /* khoảng cách giữa các vạch là 9px (1px -> 10px) */
   );
-
 }
 
 /* 2. Tạo hiệu ứng avatar cho hình ảnh AI */
@@ -129,6 +128,13 @@ body {
 .separator::after {
   margin-left: 10px; /* khoảng cách giữa đường kẻ bên phải và chữ */
 }
+/* header */
+/* code here */
+
+/* end header */
+
+/* main */
+/* code here */
 
 /* 4. Định dạng phần sample-quizzes (3 ô quiz mẫu) */
 .sample-quizzes {
@@ -137,6 +143,7 @@ body {
   gap: 50px;                  /* khoảng cách giữa các ô */
   padding: 20px;              /* khoảng cách nội bộ, tùy chỉnh */
 }
+
 
 /* 5. Định dạng quiz-box để đảm bảo các ô có kích thước bằng nhau */
 .quiz-box {
