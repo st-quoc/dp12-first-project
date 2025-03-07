@@ -37,44 +37,41 @@ img {
 
 /* end general */
 body {
-  font-size: 24px; /* Thay đổi giá trị này theo mong muốn*/
+  font-size: 24px; 
   font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
-/* header */
-/* code here */
-/* 1. Định dạng phần header-top để hiển thị theo hàng ngang */
+
 .header-top {
   display: flex;
-  align-items: center; /* căn giữa theo chiều dọc */
-  gap: 15px; /* khoảng cách giữa các phần tử */
-  padding: 20px; /* khoảng cách nội bộ, tùy chỉnh */
+  align-items: center; 
+  gap: 15px; 
+  padding: 20px; 
   background-color: #d0e6ff; 
   background-image: repeating-linear-gradient(
-    135deg,                      /* góc 135° cho đường chéo */
-    rgba(0, 0, 0, 0.1) 0px,      /* bắt đầu 1px kẻ với màu xám nhạt (0,0,0,0.1) */
-    rgba(0, 0, 0, 0.1) 1px,      /* độ dày 1px của vạch */
-    transparent 1px,            /* chuyển sang trong suốt sau 1px */
-    transparent 10px            /* khoảng cách giữa các vạch là 9px (1px -> 10px) */
+    135deg,                      
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 10px
   );
 
 }
 
-/* 2. Tạo hiệu ứng avatar cho hình ảnh AI */
 .ai-logo img {
-  width: 400px;       /* đặt kích thước cố định */
-  height: 400px;      /* đảm bảo tỉ lệ vuông để bo tròn được */
-  object-fit: cover; /* giữ tỉ lệ ảnh và cắt phần thừa nếu cần */
-  border-radius: 50%; /* bo tròn hoàn toàn, tạo thành hình tròn */
-  margin-left: 200px; /* Điều chỉnh số pixel theo nhu cầu của bạn */
-  border: 15px solid #000000; /* Chọn màu viền phù hợp */
+  width: 400px;       
+  height: 400px;      
+  object-fit: cover; 
+  border-radius: 50%; 
+  margin-left: 200px; 
+  border: 15px solid #000000; 
 }
 
-/* 3. Định dạng h1 để hiển thị bên cạnh ảnh AI */
+
 .header-top h1 {
-  margin: 0; /* loại bỏ khoảng cách mặc định */
-  font-size: 100px; /* tùy chỉnh kích thước chữ */
-  color: white; /* Màu chữ chính */
-  -webkit-text-stroke: 4px black; /* Đường viền chữ: độ dày 1px, màu đen */
+  margin: 0; 
+  font-size: 100px; 
+  color: white; 
+  -webkit-text-stroke: 4px black; 
 }
 
 .header-content {
@@ -85,72 +82,72 @@ body {
 }
 #generate-btn {
   display: block;
-  margin: 40px auto 0; /* margin-top: 20px, auto căn giữa, margin-bottom: 0 */
+  margin: 40px auto 0; 
   cursor: pointer;
-  background-color: #00aaff; /* Màu nền xanh */
-  color: white;              /* Màu chữ trắng */
-  border: none;              /* Không viền */
-  border-radius: 5px;        /* Bo tròn các góc */
-  padding: 20px 40px;        /* Khoảng cách bên trong nút */
-  font-size: 24px;           /* Kích thước chữ */
+  background-color: #00aaff; 
+  color: white;              
+  border: none;              
+  border-radius: 5px;        
+  padding: 20px 40px;        
+  font-size: 24px;           
   font-family: "Comic Sans MS", "Comic Sans", cursive;
-  cursor: pointer;           /* Hiệu ứng con trỏ khi hover */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng chuyển động khi hover */
+  cursor: pointer;           
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease, transform 0.2s ease; 
 }
 
 #generate-btn:hover {
-  background-color: #0491c8; /* Đổi màu nền khi hover */
-  transform: scale(1.05);    /* Phóng to nhẹ nút khi hover */
+  background-color: #0491c8; 
+  transform: scale(1.05);    
 }
 
 #generate-btn:active {
-  transform: scale(0.98);    /* Thu nhỏ nhẹ khi click */
+  transform: scale(0.98);   
 }
 
 .separator {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 20px 0; /* khoảng cách trên dưới, tùy chỉnh */
+  margin: 20px 0; 
 }
 
 .separator::before,
 .separator::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid #000; /* tạo đường kẻ, thay #000 bằng màu mong muốn */
+  border-bottom: 1px solid #000; 
 }
 
 .separator::before {
-  margin-right: 10px; /* khoảng cách giữa đường kẻ bên trái và chữ */
+  margin-right: 10px;
 }
 
 .separator::after {
-  margin-left: 10px; /* khoảng cách giữa đường kẻ bên phải và chữ */
+  margin-left: 10px; 
 }
 
-/* 4. Định dạng phần sample-quizzes (3 ô quiz mẫu) */
+
 .sample-quizzes {
-  display: flex;              /* sắp xếp theo hàng ngang */
-  justify-content: center;    /* căn giữa theo chiều ngang */
-  gap: 50px;                  /* khoảng cách giữa các ô */
-  padding: 20px;              /* khoảng cách nội bộ, tùy chỉnh */
+  display: flex;              
+  justify-content: center;    
+  gap: 50px;                  
+  padding: 20px;              
 }
 
-/* 5. Định dạng quiz-box để đảm bảo các ô có kích thước bằng nhau */
+
 .quiz-box {
-  width: 600px;       /* kích thước cố định, tùy chỉnh */
-  height: 400px;       /* kích thước cố định, tùy chỉnh */
-  overflow: hidden;   /* ẩn phần ảnh vượt ra ngoài ô */
-  border-radius: 8px; /* bo tròn góc nếu muốn */
+  width: 600px;       
+  height: 400px;       
+  overflow: hidden;   
+  border-radius: 8px; 
 }
 
-/* 6. Định dạng hình ảnh bên trong mỗi ô quiz mẫu */
+
 .quiz-box img {
   width: 100%;
   height: 100%;
-  object-fit: cover;  /* đảm bảo ảnh giữ tỉ lệ và lấp đầy ô */
+  object-fit: cover;  
 }
 .image-effect {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
