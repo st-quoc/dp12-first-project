@@ -54,7 +54,6 @@ body {
     transparent 1px,
     transparent 10px
   );
-
 }
 
 .ai-logo img {
@@ -127,14 +126,12 @@ body {
   margin-left: 10px; 
 }
 
-
 .sample-quizzes {
   display: flex;              
   justify-content: center;    
   gap: 50px;                  
   padding: 20px;              
 }
-
 
 .quiz-box {
   width: 600px;       
