@@ -80,4 +80,53 @@ async function generateQuiz() {
   }
 }
 
+function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = false) {
+  const quizContainer = document.getElementById('quiz-container')
+
+  const quizItem = document.createElement('div')
+  quizItem.classList.add('quiz-item')
+  quizItem.dataset.correctAnswer = questionObj.correct_answer
+  quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`
+
+  questionObj.options.forEach((option, i) => {
+    const optionLabel = String.fromCharCode(65 + i) // A, B, C, D
+    const inputId = `question${index}-${i}-${quizId}` // Đảm bảo ID là duy nhất
+
+    quizItem.innerHTML += `
+          <label for="${inputId}">
+              <input type="radio" id="${inputId}" name="question${index}" value="${option}" disabled>
+              ${optionLabel}. ${option}
+          </label><br>`
+  })
+
+  quizContainer.appendChild(quizItem)
+
+  if (index === totalQuestions - 1) {
+    setTimeout(() => loadQuizProgress(quizId), 100)
+  }
+  if (!isSavedQuiz && index === totalQuestions - 1) {
+    const buttonContainer = document.createElement('div')
+    buttonContainer.id = 'quiz-buttons'
+
+    const regenerateButton = document.createElement('button')
+    regenerateButton.textContent = 'Re-generate'
+    regenerateButton.onclick = () => {
+      let savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
+      savedQuizzes = savedQuizzes.filter((quiz) => quiz.id != quizId)
+      localStorage.setItem('quizQuestions', JSON.stringify(savedQuizzes))
+      document.getElementById('quiz-container').innerHTML = ''
+      generateQuiz()
+    }
+
+    const confirmButton = document.createElement('button')
+    confirmButton.textContent = 'Confirm'
+    confirmButton.onclick = enableQuiz
+
+    buttonContainer.appendChild(regenerateButton)
+    buttonContainer.appendChild(confirmButton)
+    quizContainer.appendChild(buttonContainer)
+  }
+}
+
 window.generateQuiz = generateQuiz
+window.displayQuiz = displayQuiz
