@@ -91,8 +91,8 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
   quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`
 
   questionObj.options.forEach((option, i) => {
-    const optionLabel = String.fromCharCode(65 + i) // A, B, C, D
-    const inputId = `question${index}-${i}-${quizId}` // Đảm bảo ID là duy nhất
+    const optionLabel = String.fromCharCode(65 + i)
+    const inputId = `question${index}-${i}-${quizId}`
 
     quizItem.innerHTML += `
           <label for="${inputId}">
@@ -267,6 +267,52 @@ function displaySavedQuizzes(keepVisible = false) {
   })
 }
 
+function gradeQuiz() {
+  const quizContainer = document.getElementById('quiz-container')
+  const quizId = quizContainer.dataset.quizId
+
+  if (!quizId) {
+    console.error('❌ Lỗi: Không xác định được ID của quiz.')
+    return
+  }
+
+  let score = 0
+  let totalQuestions = document.querySelectorAll('.quiz-item').length
+
+  document.querySelectorAll('.quiz-item').forEach((quizItem, index) => {
+    const selectedOption = document.querySelector(`input[name='question${index}']:checked`)
+    const correctAnswer = quizItem.dataset.correctAnswer
+
+    if (selectedOption) {
+      if (selectedOption.value === correctAnswer) {
+        score++
+        selectedOption.parentElement.style.color = 'green'
+      } else {
+        selectedOption.parentElement.style.color = 'red'
+      }
+    }
+
+    let correctLabel = quizItem.querySelector(`input[value='${correctAnswer}']`)
+    if (correctLabel) {
+      correctLabel.parentElement.classList.add('correct-answer')
+    }
+  })
+
+  let resultContainer = document.getElementById('quiz-results')
+  disableQuiz()
+
+  if (!resultContainer) {
+    resultContainer = document.createElement('div')
+    resultContainer.id = 'quiz-results'
+    quizContainer.appendChild(resultContainer)
+  }
+  resultContainer.textContent = `Bạn đã trả lời đúng ${score}/${totalQuestions} câu.`
+
+  let quizProgress = JSON.parse(localStorage.getItem('quizProgress')) || {}
+  delete quizProgress[quizId]
+  localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
+}
+
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
 window.enableQuiz = enableQuiz
@@ -274,3 +320,4 @@ window.disableQuiz = disableQuiz
 window.loadQuizProgress = loadQuizProgress
 window.saveQuizProgress = saveQuizProgress
 window.displaySavedQuizzes = displaySavedQuizzes
+window.gradeQuiz = gradeQuiz
