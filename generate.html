@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz AI Generate</title>
+    <link rel="stylesheet" href="css/generate.css" />
+  </head>
+  <body>
+    <header class="header-top">
+      <div class="ai-logo">
+        <img src="image/ai.webp" onclick="window.location.href='index.html'" alt="AI Logo" />
+      </div>
+      <h1>Generate a quiz from any subject</h1>
+    </header>
+    <main class="quiz-container">
+        <div class="quiz-box">
+          <label for="subject">Subject:</label>
+          <input type="text" id="subject" name="subject" placeholder="Enter subject" />
+        </div>
+        <div class="quiz-box">
+          <label for="questionCount">Number of question:</label>
+          <input type="number" id="questionCount" name="questionCount" placeholder="Enter number of question" />
+        </div>
+        <div class="quiz-box">
+          <label for="timeLimit">Level:</label>
+          <input type="number" id="timeLimit" name="timeLimit" placeholder="Enter level" />
+        </div>
+        <div class="quiz-box">
+          <label for="pointsPerQuestion">Grace per question:</label>
+          <input type="number" id="pointsPerQuestion" name="pointsPerQuestion" placeholder="Enter grade" />
+        </div>
+      </main>
+
+    <footer class="footer-container">
+      <button type="submit" id="generate-btn" onclick="window.location.href='quiz.html'">Generate Quiz</button>
+      <button id="generate-btn">Delete</button>
+      <button id="generate-btn" onclick="window.location.href='result.html'">Saved</button>
+    </footer>
+  </body>
+</html>

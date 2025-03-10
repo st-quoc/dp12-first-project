@@ -32,10 +32,6 @@ img {
   max-width: 100%;
 }
 
-/* general */
-/* code here */
-
-/* end general */
 body {
   font-size: 24px; 
   font-family: "roboto", sans-serif;
@@ -65,7 +61,6 @@ body {
   border: 15px solid #000000; 
 }
 
-
 .header-top h1 {
   margin: 0; 
   font-size: 100px; 
@@ -89,7 +84,7 @@ body {
   border-radius: 5px;        
   padding: 20px 40px;        
   font-size: 24px;           
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-family: "roboto", sans-serif;
   cursor: pointer;           
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   transition: background-color 0.3s ease, transform 0.2s ease; 
@@ -140,11 +135,11 @@ body {
   border-radius: 8px; 
 }
 
-
 .quiz-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;  
+  border: 5px solid #000000; 
 }
 .image-effect {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -154,14 +149,4 @@ body {
   transform: scale(1.05);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
-/* end header */
 
-/* main */
-/* code here */
-
-/* end main */
-
-/* footer */
-/* code here */
-
-/* end footer */
