@@ -71,7 +71,7 @@ async function generateQuiz() {
         localStorage.setItem('quizQuestions', JSON.stringify(quizList))
         displaySavedQuizzes(true);
         loadQuizProgress(quizId);
-        
+
       } else {
         console.error('Lỗi: API không trả về JSON hợp lệ!')
         document.getElementById('quiz-container').innerText = 'API trả về dữ liệu không đúng định dạng!'
@@ -182,7 +182,6 @@ function disableQuiz() {
   document.querySelectorAll("input[type='radio']").forEach((input) => {
     input.disabled = true
   })
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;')
 }
 
 function saveQuizProgress() {
