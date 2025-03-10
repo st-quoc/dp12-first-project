@@ -229,9 +229,48 @@ function loadQuizProgress() {
   console.log(`✅ Tiến trình của Quiz ${quizId} đã được tải:`, progress[quizId])
 }
 
+function displaySavedQuizzes(keepVisible = false) {
+  const savedQuizWrapper = document.getElementById('saved-quiz-wrapper')
+  const savedQuizContainer = document.getElementById('saved-quiz-container')
+  const quizContainer = document.getElementById('quiz-container')
+
+  if (!savedQuizContainer) return
+
+  const savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
+
+  if (!keepVisible && savedQuizWrapper.style.display === 'block') {
+    savedQuizWrapper.style.display = 'none'
+    quizContainer.innerHTML = ''
+    return
+  }
+
+  savedQuizWrapper.style.display = 'block'
+  savedQuizContainer.innerHTML = ''
+
+  if (savedQuizzes.length === 0) {
+    savedQuizContainer.innerHTML = '<p>Không có quiz nào được lưu!</p>'
+    return
+  }
+
+  savedQuizzes.forEach((quizEntry, index) => {
+    const quizItem = document.createElement('div')
+    quizItem.classList.add('quiz-card')
+    quizItem.innerHTML = `
+      <div class="quiz-title">${quizEntry.title}</div>
+      <p class="quiz-info">Questions: ${quizEntry.questions.length}</p>
+      <div class="quiz-actions">
+        <button class="play-btn" onclick="viewSavedQuiz(${index})">▶ Play</button>
+        <button class="delete-btn" onclick="deleteSavedQuiz(${index})">🗑 Delete</button>
+      </div>
+    `
+    savedQuizContainer.appendChild(quizItem)
+  })
+}
+
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
 window.enableQuiz = enableQuiz
 window.disableQuiz = disableQuiz
 window.loadQuizProgress = loadQuizProgress
 window.saveQuizProgress = saveQuizProgress
+window.displaySavedQuizzes = displaySavedQuizzes
