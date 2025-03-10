@@ -4,8 +4,8 @@ async function generateQuiz() {
   const API_URL = `${CONFIG.API_URL}?key=${CONFIG.API_KEY}`
   const prompt = document.getElementById('prompt').value.trim()
   const questionCount = document.getElementById('question-count').value
-  const language = document.getElementById("language").value;
-  const difficulty = document.getElementById("difficulty").value;
+  const language = document.getElementById('language').value
+  const difficulty = document.getElementById('difficulty').value
 
   document.getElementById('quiz-popup').style.display = 'none'
 
@@ -133,53 +133,55 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
 
 function escapeHTML(text) {
   if (typeof text !== 'string') return text
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;')
 }
 
 function enableQuiz() {
-  document.querySelectorAll(".quiz-item label").forEach((label) => {
-    label.style.color = "";
-    label.style.fontWeight = "";
-  });
+  document.querySelectorAll('.quiz-item label').forEach((label) => {
+    label.style.color = ''
+    label.style.fontWeight = ''
+  })
   document.querySelectorAll("input[type='radio']").forEach((input) => {
-    input.disabled = false;
-    input.checked = false;
-    input.addEventListener("change", saveQuizProgress);
-  });
+    input.disabled = false
+    input.checked = false
+    input.addEventListener('change', saveQuizProgress)
+  })
 
-  const quizButtons = document.getElementById("quiz-buttons");
+  const quizButtons = document.getElementById('quiz-buttons')
   if (quizButtons) {
-    quizButtons.remove();
+    quizButtons.remove()
   }
 
-  const retryButton = document.createElement("button");
-  retryButton.id = "retry-quiz";
-  retryButton.textContent = "Làm lại Quiz này";
+  const retryButton = document.createElement('button')
+  retryButton.id = 'retry-quiz'
+  retryButton.textContent = 'Làm lại Quiz này'
   retryButton.onclick = () => {
-    enableQuiz();
-  };
-
-  if (!document.getElementById("submit-quiz")) {
-    const submitButton = document.createElement("button");
-    submitButton.id = "submit-quiz";
-    submitButton.textContent = "Nộp bài";
-    submitButton.onclick = gradeQuiz;
-    const resultContainer = document.createElement("div");
-    resultContainer.id = "quiz-results";
-    resultContainer.style.marginTop = "20px";
-    resultContainer.style.fontWeight = "bold";
-
-    document.getElementById("quiz-container").appendChild(submitButton);
-    document.getElementById("quiz-container").appendChild(retryButton);
-    document.getElementById("quiz-container").appendChild(resultContainer);
+    enableQuiz()
   }
+
+  if (!document.getElementById('submit-quiz')) {
+    const submitButton = document.createElement('button')
+    submitButton.id = 'submit-quiz'
+    submitButton.textContent = 'Nộp bài'
+    submitButton.onclick = gradeQuiz
+    const resultContainer = document.createElement('div')
+    resultContainer.id = 'quiz-results'
+    resultContainer.style.marginTop = '20px'
+    resultContainer.style.fontWeight = 'bold'
+
+    document.getElementById('quiz-container').appendChild(submitButton)
+    document.getElementById('quiz-container').appendChild(retryButton)
+    document.getElementById('quiz-container').appendChild(resultContainer)
+  }
+}
+
+function disableQuiz() {
+  document.querySelectorAll("input[type='radio']").forEach((input) => {
+    input.disabled = true
+  })
 }
 
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
 window.enableQuiz = enableQuiz
+window.disableQuiz = disableQuiz
