@@ -4,8 +4,8 @@ async function generateQuiz() {
   const API_URL = `${CONFIG.API_URL}?key=${CONFIG.API_KEY}`
   const prompt = document.getElementById('prompt').value.trim()
   const questionCount = document.getElementById('question-count').value
-  const language = document.getElementById('language').value
-  const difficulty = document.getElementById('difficulty').value
+  const language = document.getElementById("language").value;
+  const difficulty = document.getElementById("difficulty").value;
 
   document.getElementById('quiz-popup').style.display = 'none'
 
@@ -91,8 +91,8 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
   quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`
 
   questionObj.options.forEach((option, i) => {
-    const optionLabel = String.fromCharCode(65 + i)
-    const inputId = `question${index}-${i}-${quizId}`
+    const optionLabel = String.fromCharCode(65 + i) // A, B, C, D
+    const inputId = `question${index}-${i}-${quizId}` // Đảm bảo ID là duy nhất
 
     quizItem.innerHTML += `
           <label for="${inputId}">
@@ -119,6 +119,7 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
       document.getElementById('quiz-container').innerHTML = ''
       generateQuiz()
     }
+
     const confirmButton = document.createElement('button')
     confirmButton.textContent = 'Confirm'
     confirmButton.onclick = enableQuiz
@@ -140,5 +141,45 @@ function escapeHTML(text) {
     .replace(/'/g, '&#039;')
 }
 
+function enableQuiz() {
+  document.querySelectorAll(".quiz-item label").forEach((label) => {
+    label.style.color = "";
+    label.style.fontWeight = "";
+  });
+  document.querySelectorAll("input[type='radio']").forEach((input) => {
+    input.disabled = false;
+    input.checked = false;
+    input.addEventListener("change", saveQuizProgress);
+  });
+
+  const quizButtons = document.getElementById("quiz-buttons");
+  if (quizButtons) {
+    quizButtons.remove();
+  }
+
+  const retryButton = document.createElement("button");
+  retryButton.id = "retry-quiz";
+  retryButton.textContent = "Làm lại Quiz này";
+  retryButton.onclick = () => {
+    enableQuiz();
+  };
+
+  if (!document.getElementById("submit-quiz")) {
+    const submitButton = document.createElement("button");
+    submitButton.id = "submit-quiz";
+    submitButton.textContent = "Nộp bài";
+    submitButton.onclick = gradeQuiz;
+    const resultContainer = document.createElement("div");
+    resultContainer.id = "quiz-results";
+    resultContainer.style.marginTop = "20px";
+    resultContainer.style.fontWeight = "bold";
+
+    document.getElementById("quiz-container").appendChild(submitButton);
+    document.getElementById("quiz-container").appendChild(retryButton);
+    document.getElementById("quiz-container").appendChild(resultContainer);
+  }
+}
+
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
+window.enableQuiz = enableQuiz
