@@ -69,6 +69,9 @@ async function generateQuiz() {
         let quizList = JSON.parse(localStorage.getItem('quizQuestions')) || []
         quizList.push({ id: quizId, title: prompt, questions: sanitizedQuiz })
         localStorage.setItem('quizQuestions', JSON.stringify(quizList))
+        displaySavedQuizzes(true);
+        loadQuizProgress(quizId);
+        
       } else {
         console.error('Lỗi: API không trả về JSON hợp lệ!')
         document.getElementById('quiz-container').innerText = 'API trả về dữ liệu không đúng định dạng!'
