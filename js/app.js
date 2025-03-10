@@ -4,8 +4,8 @@ async function generateQuiz() {
   const API_URL = `${CONFIG.API_URL}?key=${CONFIG.API_KEY}`
   const prompt = document.getElementById('prompt').value.trim()
   const questionCount = document.getElementById('question-count').value
-  const language = document.getElementById("language").value;
-  const difficulty = document.getElementById("difficulty").value;
+  const language = document.getElementById('language').value
+  const difficulty = document.getElementById('difficulty').value
 
   document.getElementById('quiz-popup').style.display = 'none'
 
@@ -91,8 +91,8 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
   quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`
 
   questionObj.options.forEach((option, i) => {
-    const optionLabel = String.fromCharCode(65 + i) // A, B, C, D
-    const inputId = `question${index}-${i}-${quizId}` // Đảm bảo ID là duy nhất
+    const optionLabel = String.fromCharCode(65 + i)
+    const inputId = `question${index}-${i}-${quizId}`
 
     quizItem.innerHTML += `
           <label for="${inputId}">
@@ -119,7 +119,6 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
       document.getElementById('quiz-container').innerHTML = ''
       generateQuiz()
     }
-
     const confirmButton = document.createElement('button')
     confirmButton.textContent = 'Confirm'
     confirmButton.onclick = enableQuiz
@@ -128,6 +127,17 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
     buttonContainer.appendChild(confirmButton)
     quizContainer.appendChild(buttonContainer)
   }
+  quizContainer.addEventListener('change', () => saveQuizProgress(quizId))
+}
+
+function escapeHTML(text) {
+  if (typeof text !== 'string') return text
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
 }
 
 window.generateQuiz = generateQuiz
