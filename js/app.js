@@ -4,8 +4,8 @@ async function generateQuiz() {
   const API_URL = `${CONFIG.API_URL}?key=${CONFIG.API_KEY}`
   const prompt = document.getElementById('prompt').value.trim()
   const questionCount = document.getElementById('question-count').value
-  const language = document.getElementById("language").value;
-  const difficulty = document.getElementById("difficulty").value;
+  const language = document.getElementById('language').value
+  const difficulty = document.getElementById('difficulty').value
 
   document.getElementById('quiz-popup').style.display = 'none'
 
@@ -132,7 +132,12 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
 
 function escapeHTML(text) {
   if (typeof text !== 'string') return text
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;')
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
 }
 
 window.generateQuiz = generateQuiz
