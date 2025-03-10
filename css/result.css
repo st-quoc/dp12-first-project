@@ -1,0 +1,79 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-size: 24px; 
+font-family: "Roboto", Sans-serif;
+}
+
+.container {
+display: flex;            
+justify-content: center;  
+align-items: center; 
+gap: 30px;              
+height: 100vh;          
+box-sizing: border-box;
+padding: 20px;
+}
+
+.quiz-box {
+width: 1500px;
+height: 800px;
+border: 3px solid #000;
+border-radius: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+
+.right-panel {
+display: flex;
+flex-direction: column; 
+align-items: center;    
+gap: 20px;          
+}
+
+.score-display {
+    font-size: 1.5em;
+    font-weight: bold;
+    max-width: 200px; 
+    white-space: normal;        
+    overflow-wrap: break-word;    
+    text-align: center;         
+    }
+
+
+.button-group {
+display: flex;
+flex-direction: column; 
+gap: 10px;              
+}
+
+#button {
+display: flex;
+justify-content: center; 
+align-items: center;    
+width: 200px;
+height: 80px;
+background-color: #00aaff; 
+color: white;              
+border: none;              
+border-radius: 5px;        
+font-size: 24px;
+font-family: "Roboto", sans-serif;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+transition: background-color 0.3s ease, transform 0.2s ease;
+cursor: pointer;
+}
+
+#button:hover {
+background-color: #0491c8;
+transform: scale(1.05);
+}
+
+#button:active {
+transform: scale(0.98);
+}
