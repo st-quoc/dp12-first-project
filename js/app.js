@@ -4,6 +4,8 @@ async function generateQuiz() {
   const API_URL = `${CONFIG.API_URL}?key=${CONFIG.API_KEY}`
   const prompt = document.getElementById('prompt').value.trim()
   const questionCount = document.getElementById('question-count').value
+  const language = document.getElementById("language").value;
+  const difficulty = document.getElementById("difficulty").value;
 
   document.getElementById('quiz-popup').style.display = 'none'
 
@@ -13,8 +15,8 @@ async function generateQuiz() {
   }
 
   const basePrompt = `
-    Hãy tạo ${questionCount} câu hỏi trắc nghiệm với chủ đề: "${prompt}".
-    Mỗi câu hỏi cần có 4 phương án ABCD. Định dạng JSON như sau:
+    Hãy tạo ${questionCount} câu hỏi trắc nghiệm bằng ngôn ngữ ${language} có độ khó ${difficulty} với chủ đề: "${prompt}".
+    Mỗi câu hỏi cần có 4 phương án ABCD và hãy đảo vị trí của đáp án đúng. Định dạng JSON như sau:
     [
       {
         "question": "Sự kiện nào đánh dấu mốc quan trọng trong quá trình kết thúc chiến tranh ở Việt Nam sau năm 1975?",
