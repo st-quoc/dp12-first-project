@@ -314,41 +314,60 @@ function gradeQuiz() {
 }
 
 function viewSavedQuiz(index) {
-  const savedQuizzes = JSON.parse(localStorage.getItem("quizQuestions")) || [];
-  const quizData = savedQuizzes[index];
+  const savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
+  const quizData = savedQuizzes[index]
 
   if (!quizData) {
-    alert("❌ Không tìm thấy quiz!");
-    return;
+    alert('❌ Không tìm thấy quiz!')
+    return
   }
 
-  document.getElementById("quiz-popup-container").style.display = "flex";
-  const quizContainer = document.getElementById("quiz-container");
-  quizContainer.dataset.quizId = quizData.id;
-  quizContainer.innerHTML = `<h3>${quizData.title}</h3>`;
+  document.getElementById('quiz-popup-container').style.display = 'flex'
+  const quizContainer = document.getElementById('quiz-container')
+  quizContainer.dataset.quizId = quizData.id
+  quizContainer.innerHTML = `<h3>${quizData.title}</h3>`
 
   quizData.questions.forEach((q, idx) => {
-    displayQuiz(q, idx, quizData.questions.length, true);
-  });
+    displayQuiz(q, idx, quizData.questions.length, true)
+  })
 
-  loadQuizProgress(quizData.id);
-  document.getElementById("quiz-buttons")?.remove();
-  document.getElementById("submit-quiz")?.remove();
-  document.getElementById("retry-quiz")?.remove();
+  loadQuizProgress(quizData.id)
+  document.getElementById('quiz-buttons')?.remove()
+  document.getElementById('submit-quiz')?.remove()
+  document.getElementById('retry-quiz')?.remove()
 
-  const retryButton = document.createElement("button");
-  retryButton.id = "retry-quiz";
-  retryButton.textContent = "Làm lại Quiz này";
+  const retryButton = document.createElement('button')
+  retryButton.id = 'retry-quiz'
+  retryButton.textContent = 'Làm lại Quiz này'
   retryButton.onclick = () => {
-    viewSavedQuiz(index);
-    enableQuiz();
-  };
-  quizContainer.appendChild(retryButton);
-  const submitButton = document.createElement("button");
-  submitButton.id = "submit-quiz";
-  submitButton.textContent = "Nộp bài";
-  submitButton.onclick = gradeQuiz;
-  quizContainer.appendChild(submitButton);
+    viewSavedQuiz(index)
+    enableQuiz()
+  }
+  quizContainer.appendChild(retryButton)
+  const submitButton = document.createElement('button')
+  submitButton.id = 'submit-quiz'
+  submitButton.textContent = 'Nộp bài'
+  submitButton.onclick = gradeQuiz
+  quizContainer.appendChild(submitButton)
+}
+function deleteSavedQuiz(index) {
+  let savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
+  let quizProgress = JSON.parse(localStorage.getItem('quizProgress')) || {}
+
+  if (index >= 0 && index < savedQuizzes.length) {
+    const quizId = savedQuizzes[index].id
+    savedQuizzes.splice(index, 1)
+
+    if (quizId && quizProgress[quizId]) {
+      delete quizProgress[quizId]
+      localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
+      console.log(`✅ Đã xóa tiến trình của Quiz ID: ${quizId}`)
+    }
+
+    localStorage.setItem('quizQuestions', JSON.stringify(savedQuizzes))
+  }
+
+  displaySavedQuizzes(true)
 }
 
 window.generateQuiz = generateQuiz
@@ -360,3 +379,4 @@ window.saveQuizProgress = saveQuizProgress
 window.displaySavedQuizzes = displaySavedQuizzes
 window.gradeQuiz = gradeQuiz
 window.viewSavedQuiz = viewSavedQuiz
+window.deleteSavedQuiz = deleteSavedQuiz
