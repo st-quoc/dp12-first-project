@@ -13,13 +13,13 @@
 
   <body>
     <!-- header -->
-    <header>
+    <!-- <header>
       <div class="header-top">
         <div class="ai-logo">
           <img src="image/ai.webp" alt="Ảnh AI" />
         </div>
         <div class="header-content">
-          <h1>Generate a quiz from any subject</h1>         
+          <h1>Generate a quiz from any subject</h1>
           <button id="generate-btn">Generate</button>
         </div>
       </div>
@@ -29,31 +29,36 @@
         </div>
         <div class="sample-quizzes">
           <div class="quiz-box">
-            <img src="image/toan.jpeg" alt="Chủ đề toántoán" class="image-effect"/>
+            <img src="image/toan.jpeg" alt="Chủ đề toántoán" class="image-effect" />
           </div>
           <div class="quiz-box">
-            <img src="image/eng.jpg" alt="Chủ đề tiếng anhanh" class="image-effect"/>
+            <img src="image/eng.jpg" alt="Chủ đề tiếng anhanh" class="image-effect" />
           </div>
           <div class="quiz-box">
-            <img src="image/html.jpg" alt="Chủ đề HTML" class="image-effect"/>
+            <img src="image/html.jpg" alt="Chủ đề HTML" class="image-effect" />
           </div>
         </div>
       </div>
-    </header>
+    </header> -->
     <!-- end header -->
 
     <!-- main -->
     <main>
-      <!-- code here -->
-      <h1>Quiz Generator</h1>
-      <label for="topicInput">Chủ đề:</label>
-      <input type="text" id="topicInput" placeholder="Nhập chủ đề..." />
-
-      <label for="questionCountInput">Số lượng câu hỏi:</label>
-      <input type="number" id="questionCountInput" placeholder="Nhập số lượng câu hỏi (tối đa 10)" min="1" max="10" />
-      <button onclick="generateQuiz()">Tạo đề</button>
-      <div id="result"></div>
-
+      <button id="show-quiz-form">Generate Quiz by AI</button>
+      <div id="quiz-popup" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Generate Quiz</h2>
+          <input type="text" id="prompt" placeholder="Quiz Topic" />
+          <select id="question-count">
+            <option value="5">5 questions</option>
+            <option value="10">10 questions</option>
+            <option value="15">15 questions</option>
+            <option value="20">20 questions</option>
+          </select>
+          <button onclick="generateQuiz()">Generate Quiz</button>
+        </div>
+      </div>
     </main>
     <!--   end main   -->
 
@@ -65,8 +70,32 @@
     <!-- end footer -->
 
     <!-- script -->
-    <script src="../js/script.js"></script>
     <script type="module" src="../js/app.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('quiz-popup')
+        const btn = document.getElementById('show-quiz-form')
+        const closeBtn = document.querySelector('.close')
+
+        // Khi nhấn nút, hiển thị popup
+        btn.onclick = function () {
+          modal.style.display = 'flex'
+        }
+
+        // Khi nhấn vào nút "X", đóng popup
+        closeBtn.onclick = function () {
+          modal.style.display = 'none'
+        }
+
+        // Khi nhấn ra ngoài popup, cũng đóng
+        window.onclick = function (event) {
+          if (event.target === modal) {
+            modal.style.display = 'none'
+          }
+        }
+      })
+    </script>
+
     <!-- end script -->
   </body>
 </html>
