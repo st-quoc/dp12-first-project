@@ -388,3 +388,4 @@ window.gradeQuiz = gradeQuiz
 window.viewSavedQuiz = viewSavedQuiz
 window.deleteSavedQuiz = deleteSavedQuiz
 window.clearStorage = clearStorage
+document.addEventListener("DOMContentLoaded", displaySavedQuizzes)
