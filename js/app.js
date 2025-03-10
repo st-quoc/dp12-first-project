@@ -313,6 +313,44 @@ function gradeQuiz() {
   localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
 }
 
+function viewSavedQuiz(index) {
+  const savedQuizzes = JSON.parse(localStorage.getItem("quizQuestions")) || [];
+  const quizData = savedQuizzes[index];
+
+  if (!quizData) {
+    alert("❌ Không tìm thấy quiz!");
+    return;
+  }
+
+  document.getElementById("quiz-popup-container").style.display = "flex";
+  const quizContainer = document.getElementById("quiz-container");
+  quizContainer.dataset.quizId = quizData.id;
+  quizContainer.innerHTML = `<h3>${quizData.title}</h3>`;
+
+  quizData.questions.forEach((q, idx) => {
+    displayQuiz(q, idx, quizData.questions.length, true);
+  });
+
+  loadQuizProgress(quizData.id);
+  document.getElementById("quiz-buttons")?.remove();
+  document.getElementById("submit-quiz")?.remove();
+  document.getElementById("retry-quiz")?.remove();
+
+  const retryButton = document.createElement("button");
+  retryButton.id = "retry-quiz";
+  retryButton.textContent = "Làm lại Quiz này";
+  retryButton.onclick = () => {
+    viewSavedQuiz(index);
+    enableQuiz();
+  };
+  quizContainer.appendChild(retryButton);
+  const submitButton = document.createElement("button");
+  submitButton.id = "submit-quiz";
+  submitButton.textContent = "Nộp bài";
+  submitButton.onclick = gradeQuiz;
+  quizContainer.appendChild(submitButton);
+}
+
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
 window.enableQuiz = enableQuiz
@@ -321,3 +359,4 @@ window.loadQuizProgress = loadQuizProgress
 window.saveQuizProgress = saveQuizProgress
 window.displaySavedQuizzes = displaySavedQuizzes
 window.gradeQuiz = gradeQuiz
+window.viewSavedQuiz = viewSavedQuiz
