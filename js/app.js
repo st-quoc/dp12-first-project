@@ -387,3 +387,4 @@ window.displaySavedQuizzes = displaySavedQuizzes
 window.gradeQuiz = gradeQuiz
 window.viewSavedQuiz = viewSavedQuiz
 window.deleteSavedQuiz = deleteSavedQuiz
+window.clearStorage = clearStorage
