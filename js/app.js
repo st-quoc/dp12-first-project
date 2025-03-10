@@ -132,13 +132,57 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
 
 function escapeHTML(text) {
   if (typeof text !== 'string') return text
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;')
+}
+
+function saveQuizProgress() {
+  const quizContainer = document.getElementById('quiz-container')
+  const quizId = quizContainer.dataset.quizId
+  if (!quizId) {
+    console.error('❌ Lỗi: Không tìm thấy quizId khi lưu tiến trình!')
+    return
+  }
+
+  let progress = JSON.parse(localStorage.getItem('quizProgress')) || {}
+  progress[quizId] = {}
+
+  document.querySelectorAll('.quiz-item').forEach((quizItem, index) => {
+    const selectedOption = document.querySelector(`input[name='question${index}']:checked`)
+    if (selectedOption) {
+      progress[quizId][`question${index}`] = selectedOption.value
+    }
+  })
+
+  localStorage.setItem('quizProgress', JSON.stringify(progress))
+  console.log(`✅ Tiến trình của Quiz ${quizId} đã được lưu:`, progress)
+}
+
+function loadQuizProgress() {
+  const quizContainer = document.getElementById('quiz-container')
+  const quizId = quizContainer.dataset.quizId
+  if (!quizId) {
+    console.error('❌ Lỗi: Không tìm thấy quizId khi tải tiến trình!')
+    return
+  }
+
+  let progress = JSON.parse(localStorage.getItem('quizProgress')) || {}
+  if (!progress[quizId]) return
+
+  document.querySelectorAll('.quiz-item').forEach((quizItem, index) => {
+    const savedAnswer = progress[quizId][`question${index}`]
+    if (savedAnswer) {
+      const escapedAnswer = CSS.escape(savedAnswer)
+      const inputToCheck = quizItem.querySelector(`input[value='${escapedAnswer}']`)
+      if (inputToCheck) {
+        inputToCheck.checked = true
+      }
+    }
+  })
+
+  console.log(`✅ Tiến trình của Quiz ${quizId} đã được tải:`, progress[quizId])
 }
 
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
+window.loadQuizProgress = loadQuizProgress
+window.saveQuizProgress = saveQuizProgress
