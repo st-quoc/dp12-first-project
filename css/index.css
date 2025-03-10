@@ -38,7 +38,7 @@ img {
 /* end general */
 body {
   font-size: 24px; 
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-family: "roboto", sans-serif;
 }
 
 .header-top {
