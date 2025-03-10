@@ -369,6 +369,13 @@ function deleteSavedQuiz(index) {
 
   displaySavedQuizzes(true)
 }
+function clearStorage() {
+  if (confirm('Bạn có chắc chắn muốn xóa tất cả các quiz đã lưu?')) {
+    localStorage.removeItem('quizQuestions')
+    localStorage.removeItem('quizProgress')
+    displaySavedQuizzes()
+  }
+}
 
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
