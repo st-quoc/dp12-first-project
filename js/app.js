@@ -250,7 +250,7 @@ function displaySavedQuizzes(keepVisible = false) {
   savedQuizContainer.innerHTML = ''
 
   if (savedQuizzes.length === 0) {
-    savedQuizContainer.innerHTML = '<p>Không có quiz nào được lưu!</p>'
+    savedQuizContainer.innerHTML = '<p>No saved quiz here!</p>'
     return
   }
 
