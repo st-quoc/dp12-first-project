@@ -326,7 +326,6 @@ function viewSavedQuiz(index) {
 
   if (!quizData) {
     alert('❌ Cannot find quiz!')
-    console.log("Cannot find quiz");
     return
   }
 
