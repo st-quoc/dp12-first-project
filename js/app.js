@@ -69,6 +69,9 @@ async function generateQuiz() {
         let quizList = JSON.parse(localStorage.getItem('quizQuestions')) || []
         quizList.push({ id: quizId, title: prompt, questions: sanitizedQuiz })
         localStorage.setItem('quizQuestions', JSON.stringify(quizList))
+        displaySavedQuizzes(true);
+        loadQuizProgress(quizId);
+
       } else {
         console.error('Lỗi: API không trả về JSON hợp lệ!')
         document.getElementById('quiz-container').innerText = 'API trả về dữ liệu không đúng định dạng!'
@@ -91,8 +94,8 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
   quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`
 
   questionObj.options.forEach((option, i) => {
-    const optionLabel = String.fromCharCode(65 + i) // A, B, C, D
-    const inputId = `question${index}-${i}-${quizId}` // Đảm bảo ID là duy nhất
+    const optionLabel = String.fromCharCode(65 + i)
+    const inputId = `question${index}-${i}-${quizId}`
 
     quizItem.innerHTML += `
           <label for="${inputId}">
@@ -179,7 +182,6 @@ function disableQuiz() {
   document.querySelectorAll("input[type='radio']").forEach((input) => {
     input.disabled = true
   })
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;')
 }
 
 function saveQuizProgress() {
@@ -229,9 +231,163 @@ function loadQuizProgress() {
   console.log(`✅ Tiến trình của Quiz ${quizId} đã được tải:`, progress[quizId])
 }
 
+function displaySavedQuizzes(keepVisible = false) {
+  const savedQuizWrapper = document.getElementById('saved-quiz-wrapper')
+  const savedQuizContainer = document.getElementById('saved-quiz-container')
+  const quizContainer = document.getElementById('quiz-container')
+
+  if (!savedQuizContainer) return
+
+  const savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
+
+  if (!keepVisible && savedQuizWrapper.style.display === 'block') {
+    savedQuizWrapper.style.display = 'none'
+    quizContainer.innerHTML = ''
+    return
+  }
+
+  savedQuizWrapper.style.display = 'block'
+  savedQuizContainer.innerHTML = ''
+
+  if (savedQuizzes.length === 0) {
+    savedQuizContainer.innerHTML = '<p>No saved quiz here!</p>'
+    return
+  }
+
+  savedQuizzes.forEach((quizEntry, index) => {
+    const quizItem = document.createElement('div')
+    quizItem.classList.add('quiz-card')
+    quizItem.innerHTML = `
+      <div class="quiz-title">${quizEntry.title}</div>
+      <p class="quiz-info">Questions: ${quizEntry.questions.length}</p>
+      <div class="quiz-actions">
+        <button class="play-btn" onclick="viewSavedQuiz(${index})">▶ Play</button>
+        <button class="delete-btn" onclick="deleteSavedQuiz(${index})">🗑 Delete</button>
+      </div>
+    `
+    savedQuizContainer.appendChild(quizItem)
+  })
+}
+
+function gradeQuiz() {
+  const quizContainer = document.getElementById('quiz-container')
+  const quizId = quizContainer.dataset.quizId
+
+  if (!quizId) {
+    console.error('❌ Lỗi: Không xác định được ID của quiz.')
+    return
+  }
+
+  let score = 0
+  let totalQuestions = document.querySelectorAll('.quiz-item').length
+
+  document.querySelectorAll('.quiz-item').forEach((quizItem, index) => {
+    const selectedOption = document.querySelector(`input[name='question${index}']:checked`)
+    const correctAnswer = quizItem.dataset.correctAnswer
+
+    if (selectedOption) {
+      if (selectedOption.value === correctAnswer) {
+        score++
+        selectedOption.parentElement.style.color = 'green'
+      } else {
+        selectedOption.parentElement.style.color = 'red'
+      }
+    }
+
+    let correctLabel = quizItem.querySelector(`input[value='${correctAnswer}']`)
+    if (correctLabel) {
+      correctLabel.parentElement.classList.add('correct-answer')
+    }
+  })
+
+  let resultContainer = document.getElementById('quiz-results')
+  disableQuiz()
+
+  if (!resultContainer) {
+    resultContainer = document.createElement('div')
+    resultContainer.id = 'quiz-results'
+    quizContainer.appendChild(resultContainer)
+  }
+  resultContainer.textContent = `Bạn đã trả lời đúng ${score}/${totalQuestions} câu.`
+
+  let quizProgress = JSON.parse(localStorage.getItem('quizProgress')) || {}
+  delete quizProgress[quizId]
+  localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
+}
+
+function viewSavedQuiz(index) {
+  const savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
+  const quizData = savedQuizzes[index]
+
+  if (!quizData) {
+    alert('❌ Không tìm thấy quiz!')
+    return
+  }
+
+  document.getElementById('quiz-popup-container').style.display = 'flex'
+  const quizContainer = document.getElementById('quiz-container')
+  quizContainer.dataset.quizId = quizData.id
+  quizContainer.innerHTML = `<h3>${quizData.title}</h3>`
+
+  quizData.questions.forEach((q, idx) => {
+    displayQuiz(q, idx, quizData.questions.length, true)
+  })
+
+  loadQuizProgress(quizData.id)
+  document.getElementById('quiz-buttons')?.remove()
+  document.getElementById('submit-quiz')?.remove()
+  document.getElementById('retry-quiz')?.remove()
+
+  const retryButton = document.createElement('button')
+  retryButton.id = 'retry-quiz'
+  retryButton.textContent = 'Làm lại Quiz này'
+  retryButton.onclick = () => {
+    viewSavedQuiz(index)
+    enableQuiz()
+  }
+  quizContainer.appendChild(retryButton)
+  const submitButton = document.createElement('button')
+  submitButton.id = 'submit-quiz'
+  submitButton.textContent = 'Nộp bài'
+  submitButton.onclick = gradeQuiz
+  quizContainer.appendChild(submitButton)
+}
+function deleteSavedQuiz(index) {
+  let savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
+  let quizProgress = JSON.parse(localStorage.getItem('quizProgress')) || {}
+
+  if (index >= 0 && index < savedQuizzes.length) {
+    const quizId = savedQuizzes[index].id
+    savedQuizzes.splice(index, 1)
+
+    if (quizId && quizProgress[quizId]) {
+      delete quizProgress[quizId]
+      localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
+      console.log(`✅ Đã xóa tiến trình của Quiz ID: ${quizId}`)
+    }
+
+    localStorage.setItem('quizQuestions', JSON.stringify(savedQuizzes))
+  }
+
+  displaySavedQuizzes(true)
+}
+function clearStorage() {
+  if (confirm('Bạn có chắc chắn muốn xóa tất cả các quiz đã lưu?')) {
+    localStorage.removeItem('quizQuestions')
+    localStorage.removeItem('quizProgress')
+    displaySavedQuizzes()
+  }
+}
+
 window.generateQuiz = generateQuiz
 window.displayQuiz = displayQuiz
 window.enableQuiz = enableQuiz
 window.disableQuiz = disableQuiz
 window.loadQuizProgress = loadQuizProgress
 window.saveQuizProgress = saveQuizProgress
+window.displaySavedQuizzes = displaySavedQuizzes
+window.gradeQuiz = gradeQuiz
+window.viewSavedQuiz = viewSavedQuiz
+window.deleteSavedQuiz = deleteSavedQuiz
+window.clearStorage = clearStorage
+document.addEventListener("DOMContentLoaded", displaySavedQuizzes)

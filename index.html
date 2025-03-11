@@ -1,46 +1,70 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Quiz AI Generate with Gemini" />
-    <meta name="keywords" content="AI Generate, Free, Quiz," />
-    <meta name="author" content="DP12-First-Project" />
-    <meta name="robots" content="index, follow" />
-    <title>Quiz AI Generate with Gemini</title>
-    <link rel="stylesheet" href="css/index.css" />
-  </head>
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Quiz AI Generate with Gemini" />
+  <meta name="keywords" content="AI Generate, Free, Quiz," />
+  <meta name="author" content="DP12-First-Project" />
+  <meta name="robots" content="index, follow" />
+  <title>Quiz AI Generate with Gemini</title>
+  
+  <link rel="stylesheet" href="css/test.css" />
+</head>
   <body>
-    <!-- header -->
     <header>
       <div class="header-top">
         <div class="ai-logo">
           <img src="image/ai.webp" onclick="window.location.href='index.html'" alt="Ảnh AI" />
         </div>
         <div class="header-content">
-          <h1>Generate a quiz from any subject</h1>
-          <button id="generate-btn" onclick="window.location.href='generate.html'">Generate</button>
-        </div>
-      </div>
-      <div class="header-bottom">
-        <div class="separator">
-          <span>Example subject</span>
-        </div>
-        <div class="sample-quizzes">
-          <div class="quiz-box">
-            <img src="image/quiz.webp" alt="Chủ đề mau" onclick="window.location.href='quiz.html'"class="image-effect" />
-          </div>
-          <div class="quiz-box">
-            <img src="image/quiz.webp" alt="Chủ đề mau" onclick="window.location.href='quiz.html'" class="image-effect" />
-          </div>
-          <div class="quiz-box">
-            <img src="image/quiz.webp" alt="Chủ đề mau" onclick="window.location.href='quiz.html'" class="image-effect" />
+          <h1>AI Generate with Gemini</h1>
+          <div class="button-group">
+            <button class="btn1" onclick="clearStorage()">Delete history</button>
+            <button class="btn2" onclick="displaySavedQuizzes()">View saved quiz</button>
+            <button class="btn3" id="show-quiz-form">Generate Quiz by AI</button>
           </div>
         </div>
       </div>
     </header>
-
+    <!-- main -->
+    <main>
+      <!-- Popup Form -->
+      <div id="quiz-popup" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Generate Quiz</h2>
+          <input type="text" id="prompt" placeholder="Quiz Topic" />
+          <select aria-label="questions" id="question-count">
+            <option value="5">5 questions</option>
+            <option value="10">10 questions</option>
+            <option value="15">15 questions</option>
+            <option value="20">20 questions</option>
+          </select>
+          <select aria-label="difficulty" id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+          <select aria-label="language" id="language">
+            <option value="english">English</option>
+            <option value="vietnamese">Vietnamese</option>
+          </select>
+          <button onclick="generateQuiz()">Generate Quiz</button>
+        </div>
+      </div>
+      <div id="saved-quiz-wrapper">
+        <h3 id="saved-quiz-title">Saved quiz</h3>
+        <div id="saved-quiz-container"></div>
+      </div>
+      <div id="quiz-popup-container">
+        <button id="quiz-popup-close" onclick="document.getElementById('quiz-popup-container').style.display='none'">✖</button>
+        <div id="view-quiz-popup">
+          <div id="quiz-container"></div>
+        </div>
+      </div>
+    </main>
     <footer>
       <p>&copy; 2025 DP12-Team 8. All rights reserved.</p>
     </footer>

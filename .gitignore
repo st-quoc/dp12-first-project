@@ -1,5 +1,4 @@
 # Config private
-config.js
 # Editor/IDE files (VSCode, WebStorm, IntelliJ, etc.)
 .idea/
 .vscode/
