@@ -34,7 +34,6 @@ async function generateQuiz() {
   const requestBody = {
     contents: [{ parts: [{ text: basePrompt }] }],
   };
-
   document.getElementById("quiz-container").style.display = "flex";
   
   try {
@@ -45,6 +44,7 @@ async function generateQuiz() {
     });
 
     const data = await response.json();
+
 
     if (data.candidates && data.candidates.length > 0) {
       const rawText = data.candidates[0].content.parts[0].text;
@@ -130,16 +130,35 @@ function displayQuiz(
   quizItem.classList.add("quiz-item");
   quizItem.dataset.correctAnswer = questionObj.correct_answer;
   quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`;
+        document.getElementById('quiz-container').innerText = 'Response is not in the right format!'
+      }
+    } else {
+      document.getElementById('quiz-container').innerText = '❌ Cannot generate quiz!'
+    }
+  } catch (error) {
+    document.getElementById('quiz-container').innerText = '❌ API Error!'
+  }
+}
+
+function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = false) {
+  const quizContainer = document.getElementById('quiz-container')
+
+  const quizItem = document.createElement('div')
+  quizItem.classList.add('quiz-item')
+  quizItem.dataset.correctAnswer = questionObj.correct_answer
+  quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`
+
   questionObj.options.forEach((option, i) => {
     const optionLabel = String.fromCharCode(65 + i);
     const inputId = `question${index}-${i}-${quizId}`;
 
     quizItem.innerHTML += `
           <label for="${inputId}">
-              <input type="radio" id="${inputId}" name="question${index}" value="${option}" disabled>
+              <input type="radio" id="${inputId}" class="quest" name="question${index}" value="${option}" disabled>
               ${optionLabel}. ${option}
           </label>`;
   });
+
 
   quizContainer.appendChild(quizItem);
 
@@ -223,6 +242,7 @@ function enableQuiz() {
   const retryButton = document.createElement("button");
   retryButton.id = "retry-quiz";
   retryButton.textContent = "Retry this quiz";
+
   retryButton.onclick = () => {
     enableQuiz();
   };
@@ -268,6 +288,7 @@ function saveQuizProgress() {
   const quizId = quizContainer.dataset.quizId;
   if (!quizId) {
     return;
+
   }
 
   let progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
@@ -282,6 +303,7 @@ function saveQuizProgress() {
     }
   });
   localStorage.setItem("quizProgress", JSON.stringify(progress));
+
 }
 
 function loadQuizProgress() {
@@ -289,6 +311,7 @@ function loadQuizProgress() {
   const quizId = quizContainer.dataset.quizId;
   if (!quizId) {
     return;
+
   }
 
   let progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
@@ -353,6 +376,7 @@ function gradeQuiz() {
 
   if (!quizId) {
     return;
+
   }
 
   clearInterval(timer); // Dừng đếm ngược
@@ -392,6 +416,7 @@ function gradeQuiz() {
   }
   resultContainer.textContent = `You have correct ${score}/${totalQuestions} answer.`;
 
+
   disableQuiz();
   let quizProgress = JSON.parse(localStorage.getItem("quizProgress")) || {};
   delete quizProgress[quizId];
@@ -405,6 +430,7 @@ function viewSavedQuiz(index) {
   if (!quizData) {
     showPopup("Cannot find quiz!", "error");
     return;
+
   }
 
   document.getElementById("quiz-container").style.display = "flex";
@@ -423,12 +449,14 @@ function viewSavedQuiz(index) {
   document.getElementById("retry-quiz")?.remove();
   document.getElementById("quiz-close")?.remove();
 
+
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("quiz-buttons-container");
 
   const retryButton = document.createElement("button");
   retryButton.id = "retry-quiz";
   retryButton.textContent = "Retry this quiz";
+  
   retryButton.onclick = () => {
     viewSavedQuiz(index);
     enableQuiz();
@@ -473,6 +501,7 @@ function startCountdown(quizId, resetTimer = false) {
     document.getElementById("quiz-container").prepend(newTimerElement);
   }
 
+
   function updateTimerDisplay() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
@@ -500,6 +529,24 @@ function startCountdown(quizId, resetTimer = false) {
 
 function stopCountdown() {
   clearInterval(timer);
+
+  quizContainer.appendChild(retryButton)
+
+  const submitButton = document.createElement('button')
+  submitButton.id = 'submit-quiz'
+  submitButton.textContent = 'Grade'
+  submitButton.onclick = gradeQuiz
+  quizContainer.appendChild(submitButton)
+
+  const popupContainer = document.getElementById('quiz-popup-container')
+  popupContainer.style.display = 'flex'
+  const closeButton = document.createElement('button')
+  closeButton.id = 'quiz-popup-close'
+  closeButton.textContent = 'Close'
+  closeButton.onclick = () => {
+    popupContainer.style.display = "none"
+  }
+  quizContainer.appendChild(closeButton)
 }
 
 function deleteSavedQuiz(index) {
