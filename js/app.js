@@ -379,7 +379,7 @@ function gradeQuiz() {
 
   }
 
-  clearInterval(timer); // Dừng đếm ngược
+  clearInterval(timer);
   localStorage.removeItem(`quizTime_${quizId}`);
 
   let score = 0;
@@ -489,7 +489,7 @@ let timer;
 function startCountdown(quizId, resetTimer = false) {
   let timeLeft = resetTimer
     ? 600
-    : localStorage.getItem(`quizTime_${quizId}`) || 600; // 10 phút mặc định
+    : localStorage.getItem(`quizTime_${quizId}`) || 600;
 
   const timerElement = document.getElementById("quiz-timer");
   if (!timerElement) {
