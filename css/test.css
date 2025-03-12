@@ -38,7 +38,7 @@ body {
   display: flex;
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
-  font-size: 24px; 
+  font-size: 24px;
 }
 
 body {
@@ -50,7 +50,7 @@ body {
 header {
   background-color: #1e4e70;
   background-image: repeating-linear-gradient(
-    135deg,                      
+    135deg,
     rgba(0, 0, 0, 0.1) 0px,
     rgba(255, 255, 255, 0.1) 3px,
     transparent 1px,
@@ -60,37 +60,33 @@ header {
   text-align: center;
 }
 
-/* Top Section of Header */
 .header-top {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
-  flex-wrap: wrap; /* Ensures responsiveness */
+  flex-wrap: wrap;
 }
 
-/* AI Logo */
 .ai-logo img {
-  width: 200px; /* Adjust for responsiveness */
+  width: 200px;
   height: 200px;
   object-fit: cover;
   border-radius: 50%;
   border: 6px solid #000000;
-  margin: 0 auto; /* Centers the image */
+  margin: 0 auto;
 }
 
-/* Header Content */
 .header-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   width: 80%;
-  max-width: 600px; /* Prevents extra-wide stretching */
+  max-width: 600px;
   padding: 30px;
 }
 
-/* 📱 Mobile & Tablet Responsiveness */
 @media (max-width: 768px) {
   .header-top {
     flex-direction: column;
@@ -98,7 +94,7 @@ header {
   }
 
   .ai-logo img {
-    width: 150px; /* Smaller logo on mobile */
+    width: 150px;
     height: 150px;
   }
 
@@ -121,10 +117,10 @@ header {
 }
 
 h1 {
-  margin: 0; 
-  font-size: 100px; 
-  color: white; 
-  -webkit-text-stroke: 4px black; 
+  margin: 0;
+  font-size: 100px;
+  color: white;
+  -webkit-text-stroke: 4px black;
 }
 .container {
   width: 90%;
@@ -137,12 +133,12 @@ h1 {
 }
 .center-container {
   display: flex;
-  flex-direction: column; 
-  align-items: center;    
-  justify-content: center; 
-  gap: 20px;              
-  text-align: center;     
-  margin-top: 50px;        
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+  margin-top: 50px;
 }
 .quiz-form input,
 .quiz-form select {
@@ -155,114 +151,113 @@ h1 {
 
 .btn1 {
   display: flex;
-  justify-content: center;  
-  align-items: center;       
+  justify-content: center;
+  align-items: center;
   width: 250px;
   height: 100px;
-  background-color: #f43030; 
-  color: white;              
-  border: none;              
-  border-radius: 5px;        
+  background-color: #f43030;
+  color: white;
+  border: none;
+  border-radius: 5px;
   font-size: 24px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .btn1:hover {
-  background-color: #b30000; 
-  transform: scale(1.05);    
+  background-color: #b30000;
+  transform: scale(1.05);
 }
 
 .btn1:active {
-  transform: scale(0.98);   
+  transform: scale(0.98);
 }
 
 .btn2 {
   display: flex;
-  justify-content: center;  
-  align-items: center;       
+  justify-content: center;
+  align-items: center;
   width: 250px;
   height: 100px;
-  background-color: #00aaff; 
-  color: white;              
-  border: none;              
-  border-radius: 5px;        
+  background-color: #00aaff;
+  color: white;
+  border: none;
+  border-radius: 5px;
   font-size: 24px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .btn2:hover {
-  background-color: #02729e; 
-  transform: scale(1.05);    
+  background-color: #02729e;
+  transform: scale(1.05);
 }
 
 .btn2:active {
-  transform: scale(0.98);   
+  transform: scale(0.98);
 }
 
 .btn3 {
   display: flex;
-  justify-content: center;  
-  align-items: center;       
+  justify-content: center;
+  align-items: center;
   width: 250px;
   height: 100px;
-  background-color: #00ae1a; 
-  color: white;              
-  border: none;              
-  border-radius: 5px;        
+  background-color: #00ae1a;
+  color: white;
+  border: none;
+  border-radius: 5px;
   font-size: 24px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .btn3:hover {
-  background-color: #008d15; 
-  transform: scale(1.05);    
+  background-color: #008d15;
+  transform: scale(1.05);
 }
 
 .btn3:active {
-  transform: scale(0.98);   
+  transform: scale(0.98);
 }
 button {
-  /* display: flex; */
-  justify-content: center;  
-  align-items: center;       
+  justify-content: center;
+  align-items: center;
   width: 110px;
   height: 40px;
-  background-color: #363737; 
-  color: white;              
-  border: none;              
-  border-radius: 5px;        
+  background-color: #363737;
+  color: white;
+  border: none;
+  border-radius: 5px;
   font-size: 14px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 button:hover {
-  background-color: #0099ff; 
-  transform: scale(1.05);    
+  background-color: #0099ff;
+  transform: scale(1.05);
 }
 
 button:active {
-  transform: scale(0.98);   
+  transform: scale(0.98);
 }
 
 .button-group {
-  display: flex;            
-  flex-direction: row;      
-  justify-content: center;   
-  align-items: center;   
-  gap: 20px;                  
-  margin-top: 20px;           
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 #quiz-container {
@@ -356,7 +351,7 @@ button:active {
   text-align: center;
   cursor: pointer;
   position: relative;
-  border: 3px solid #000000; 
+  border: 3px solid #000000;
   margin: 10px;
   background-image: radial-gradient(circle, rgb(173, 206, 243) 0%, rgb(92, 166, 251) 100%);
 }
@@ -366,13 +361,13 @@ button:active {
 }
 
 .quiz-card::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0); /* Initially transparent */
+  background: rgba(255, 255, 255, 0);
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
   transition: backdrop-filter 0.3s ease-in-out, background 0.3s ease-in-out;
@@ -380,7 +375,7 @@ button:active {
 }
 
 .quiz-card:hover::before {
-  background: rgba(255, 255, 255, 0.1); /* Light transparent white */
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -453,25 +448,23 @@ button:active {
   min-height: 50%;
 }
 
-#quiz-popup-close{
+#quiz-popup-close {
   width: auto;
   margin: 10px 0 0 10px;
 }
 
 #quiz-popup-close:hover {
   background: darkred;
-  
 }
-
 
 footer {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #f4f4f4; /* Màu nền, bạn có thể điều chỉnh */
+  background-color: #f4f4f4;
   text-align: center;
   padding: 10px 0;
-  z-index: 999; /* Đảm bảo footer nằm trên các phần tử khác nếu cần */
+  z-index: 999;
 }
 
 .modal {
@@ -497,7 +490,6 @@ footer {
   position: relative;
 }
 
-/* Close button */
 .close {
   position: absolute;
   top: 15px;
@@ -512,7 +504,6 @@ footer {
   color: #333;
 }
 
-/* Form elements */
 h2 {
   margin-top: 0;
   margin-bottom: 20px;
@@ -555,7 +546,6 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Responsive adjustments */
 @media (max-width: 600px) {
   .modal-content {
     width: 95%;
@@ -575,13 +565,12 @@ button:hover {
   }
 }
 
-.quiz-item{
-  display: flex ; 
+.quiz-item {
+  display: flex;
   flex-direction: column;
-  
 }
 
-.quest{
+.quest {
   width: auto;
- display: inline !important; 
+  display: inline !important;
 }
