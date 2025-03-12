@@ -6,13 +6,16 @@ async function generateQuiz() {
   const questionCount = document.getElementById('question-count').value
   const language = document.getElementById('language').value
   const difficulty = document.getElementById('difficulty').value
-
-  document.getElementById('quiz-popup').style.display = 'none'
+  const quizContainer = document.getElementById('quiz-container')
+  quizContainer.style.display = 'none'
+  quizContainer.innerHTML = ''
 
   if (!prompt) {
-    alert('⚠️Please enter a topic!')
+    showPopup('Please enter a topic!', 'warning')
     return
   }
+
+  showPopup('Generating quiz...', 'loading')
 
   const basePrompt = `
     Hãy tạo ${questionCount} câu hỏi trắc nghiệm bằng ngôn ngữ ${language} có độ khó ${difficulty} với chủ đề: "${prompt}".
@@ -26,13 +29,13 @@ async function generateQuiz() {
       ...
     ]
     Chỉ trả về JSON, không có giải thích gì thêm.
-    `
+  `
 
   const requestBody = {
     contents: [{ parts: [{ text: basePrompt }] }]
   }
-  document.getElementById('quiz-popup-container').style.display = 'flex'
-  document.getElementById('quiz-container').innerHTML = 'Generate quiz..... ⏳'
+  document.getElementById('quiz-container').style.display = 'flex'
+
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -52,7 +55,6 @@ async function generateQuiz() {
         let quizData = JSON.parse(jsonString)
         const quizId = Date.now()
 
-        const quizContainer = document.getElementById('quiz-container')
         quizContainer.innerHTML = ''
         quizContainer.dataset.quizId = quizId
 
@@ -67,18 +69,48 @@ async function generateQuiz() {
         let quizList = JSON.parse(localStorage.getItem('quizQuestions')) || []
         quizList.push({ id: quizId, title: prompt, questions: sanitizedQuiz })
         localStorage.setItem('quizQuestions', JSON.stringify(quizList))
-        displaySavedQuizzes(true);
-        loadQuizProgress(quizId);
 
+        displaySavedQuizzes(true)
+        loadQuizProgress(quizId)
+        showPopup('Quiz generated successfully!', 'success', () => {
+          quizContainer.style.display = 'flex'
+          quizContainer.scrollIntoView({ behavior: 'smooth' })
+          document.getElementById('quiz-popup').style.display = 'none'
+        })
       } else {
-        document.getElementById('quiz-container').innerText = 'Response is not in the right format!'
+        showPopup('Response is not in the right format!', 'error')
       }
     } else {
-      document.getElementById('quiz-container').innerText = '❌ Cannot generate quiz!'
+      showPopup('Cannot generate quiz!', 'error')
     }
   } catch (error) {
-    document.getElementById('quiz-container').innerText = '❌ API Error!'
+    showPopup('API Error!', 'error')
   }
+}
+
+function showPopup(message, type = 'info', callback = null) {
+  const popup = document.getElementById('alert-popup')
+  const popupContent = document.getElementById('alert-popup-content')
+  const popupIcon = document.getElementById('alert-popup-icon')
+
+  const icons = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    loading: '⏳',
+    info: 'ℹ️'
+  }
+
+  popupIcon.textContent = icons[type] || 'ℹ️'
+  popupContent.textContent = message
+  popup.style.display = 'flex'
+
+  if (type === 'loading') return
+
+  setTimeout(() => {
+    popup.style.display = 'none'
+    if (callback) callback()
+  }, 1200)
 }
 
 function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = false) {
@@ -88,6 +120,7 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
   quizItem.classList.add('quiz-item')
   quizItem.dataset.correctAnswer = questionObj.correct_answer
   quizItem.innerHTML = `<h4>${index + 1}. ${questionObj.question}</h4>`
+
   questionObj.options.forEach((option, i) => {
     const optionLabel = String.fromCharCode(65 + i)
     const inputId = `question${index}-${i}-${quizId}`
@@ -106,9 +139,10 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
   }
   if (!isSavedQuiz && index === totalQuestions - 1) {
     const buttonContainer = document.createElement('div')
-    buttonContainer.id = 'quiz-buttons'
+    buttonContainer.id = 'quiz-buttons-container'
 
     const regenerateButton = document.createElement('button')
+    regenerateButton.id = 're-generate-quiz'
     regenerateButton.textContent = 'Re-generate'
     regenerateButton.onclick = () => {
       let savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
@@ -119,6 +153,7 @@ function displayQuiz(questionObj, index, totalQuestions, quizId, isSavedQuiz = f
     }
 
     const confirmButton = document.createElement('button')
+    confirmButton.id = 'confirm-quiz'
     confirmButton.textContent = 'Confirm'
     confirmButton.onclick = enableQuiz
 
@@ -135,59 +170,76 @@ function escapeHTML(text) {
 }
 
 function enableQuiz() {
+  document.getElementById('quiz-container').style.display = 'flex'
+  const quizContainer = document.getElementById('quiz-container')
+
   document.querySelectorAll('.quiz-item label').forEach((label) => {
     label.style.color = ''
     label.style.fontWeight = ''
     label.classList.remove('correct-answer')
   })
+
   document.querySelectorAll("input[type='radio']").forEach((input) => {
     input.disabled = false
     input.checked = false
     input.addEventListener('change', saveQuizProgress)
   })
 
-  const resultContainer = document.getElementById('quiz-results');
+  const resultContainer = document.getElementById('quiz-results')
   if (resultContainer) {
-    resultContainer.innerHTML = '';
+    resultContainer.innerHTML = ''
   }
 
-  const quizButtons = document.getElementById('quiz-buttons')
+  const quizButtons = document.getElementById('quiz-buttons-container')
   if (quizButtons) {
     quizButtons.remove()
   }
 
+  const quizId = document.getElementById('quiz-container').dataset.quizId
+
+  const storedTime = localStorage.getItem(`quizTime_${quizId}`)
+  const resetTime = storedTime === null
+
+  startCountdown(quizId, resetTime)
+
+  const buttonContainer = document.createElement('div')
+  buttonContainer.classList.add('quiz-buttons-container')
+
   const retryButton = document.createElement('button')
   retryButton.id = 'retry-quiz'
   retryButton.textContent = 'Retry this quiz'
+
   retryButton.onclick = () => {
     enableQuiz()
   }
+  buttonContainer.appendChild(retryButton)
 
-  const popupContainer = document.getElementById('quiz-popup-container')
+  const popupContainer = document.getElementById('quiz-container')
   popupContainer.style.display = 'flex'
-  const closeButton = document.createElement('button')
-  closeButton.id = 'quiz-popup-close'
-  closeButton.textContent = 'Close'
-  closeButton.onclick = () => {
-    popupContainer.style.display = "none"
-  }
-  
 
   if (!document.getElementById('submit-quiz')) {
     const submitButton = document.createElement('button')
     submitButton.id = 'submit-quiz'
     submitButton.textContent = 'Grade'
     submitButton.onclick = gradeQuiz
+
     const resultContainer = document.createElement('div')
     resultContainer.id = 'quiz-results'
     resultContainer.style.marginTop = '20px'
     resultContainer.style.fontWeight = 'bold'
-
-    document.getElementById('quiz-container').appendChild(submitButton)
-    document.getElementById('quiz-container').appendChild(retryButton)
-    document.getElementById('quiz-container').appendChild(closeButton)
-    document.getElementById('quiz-container').appendChild(resultContainer)
+    buttonContainer.appendChild(submitButton)
+    quizContainer.appendChild(buttonContainer)
+    quizContainer.appendChild(resultContainer)
   }
+
+  const closeButton = document.createElement('button')
+  closeButton.id = 'quiz-close'
+  closeButton.textContent = 'Close'
+  closeButton.onclick = () => {
+    popupContainer.style.display = 'none'
+    stopCountdown()
+  }
+  buttonContainer.appendChild(closeButton)
 }
 
 function disableQuiz() {
@@ -241,7 +293,7 @@ function displaySavedQuizzes(keepVisible = false) {
   const savedQuizWrapper = document.getElementById('saved-quiz-wrapper')
   const savedQuizContainer = document.getElementById('saved-quiz-container')
   const quizContainer = document.getElementById('quiz-container')
-
+  quizContainer.style.display = 'none'
   if (!savedQuizContainer) return
 
   const savedQuizzes = JSON.parse(localStorage.getItem('quizQuestions')) || []
@@ -254,9 +306,10 @@ function displaySavedQuizzes(keepVisible = false) {
 
   savedQuizWrapper.style.display = 'block'
   savedQuizContainer.innerHTML = ''
+  document.getElementById('quiz-container').style.display = 'none'
 
   if (savedQuizzes.length === 0) {
-    savedQuizContainer.innerHTML = '<p>Empty quiz!</p>'
+    showPopup('Empty quiz!', 'error')
     return
   }
 
@@ -264,13 +317,13 @@ function displaySavedQuizzes(keepVisible = false) {
     const quizItem = document.createElement('div')
     quizItem.classList.add('quiz-card')
     quizItem.innerHTML = `
-      <div class="quiz-title">${quizEntry.title}</div>
-      <p class="quiz-info">Questions: ${quizEntry.questions.length}</p>
-      <div class="quiz-actions">
-        <button class="play-btn" onclick="viewSavedQuiz(${index})">▶ Play</button>
-        <button class="delete-btn" onclick="deleteSavedQuiz(${index})">🗑 Delete</button>
-      </div>
-    `
+        <div class="quiz-title">${quizEntry.title}</div>
+        <p class="quiz-info">Questions: ${quizEntry.questions.length}</p>
+        <div class="quiz-actions">
+          <button class="play-btn" onclick="stopCountdown(); viewSavedQuiz(${index})">▶ Play</button>
+          <button class="delete-btn" onclick="deleteSavedQuiz(${index})">🗑 Delete</button>
+        </div>
+      `
     savedQuizContainer.appendChild(quizItem)
   })
 }
@@ -282,6 +335,9 @@ function gradeQuiz() {
   if (!quizId) {
     return
   }
+
+  clearInterval(timer)
+  localStorage.removeItem(`quizTime_${quizId}`)
 
   let score = 0
   let totalQuestions = document.querySelectorAll('.quiz-item').length
@@ -306,8 +362,6 @@ function gradeQuiz() {
   })
 
   let resultContainer = document.getElementById('quiz-results')
-  disableQuiz()
-
   if (!resultContainer) {
     resultContainer = document.createElement('div')
     resultContainer.id = 'quiz-results'
@@ -315,6 +369,7 @@ function gradeQuiz() {
   }
   resultContainer.textContent = `You have correct ${score}/${totalQuestions} answer.`
 
+  disableQuiz()
   let quizProgress = JSON.parse(localStorage.getItem('quizProgress')) || {}
   delete quizProgress[quizId]
   localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
@@ -325,11 +380,11 @@ function viewSavedQuiz(index) {
   const quizData = savedQuizzes[index]
 
   if (!quizData) {
-    alert('❌ Cannot find quiz!')
+    showPopup('Cannot find quiz!', 'error')
     return
   }
 
-  document.getElementById('quiz-popup-container').style.display = 'flex'
+  document.getElementById('quiz-container').style.display = 'flex'
   const quizContainer = document.getElementById('quiz-container')
   quizContainer.dataset.quizId = quizData.id
   quizContainer.innerHTML = `<h3>${quizData.title}</h3>`
@@ -339,18 +394,85 @@ function viewSavedQuiz(index) {
   })
 
   loadQuizProgress(quizData.id)
-  document.getElementById('quiz-buttons')?.remove()
+
+  document.getElementById('quiz-buttons-container')?.remove()
   document.getElementById('submit-quiz')?.remove()
   document.getElementById('retry-quiz')?.remove()
-  document.getElementById('quiz-popup-close')?.remove()
+  document.getElementById('quiz-close')?.remove()
+
+  const buttonContainer = document.createElement('div')
+  buttonContainer.classList.add('quiz-buttons-container')
 
   const retryButton = document.createElement('button')
   retryButton.id = 'retry-quiz'
   retryButton.textContent = 'Retry this quiz'
+
   retryButton.onclick = () => {
     viewSavedQuiz(index)
     enableQuiz()
+    startCountdown(quizData.id)
   }
+  buttonContainer.appendChild(retryButton)
+
+  const submitButton = document.createElement('button')
+  submitButton.id = 'submit-quiz'
+  submitButton.textContent = 'Grade'
+  submitButton.onclick = gradeQuiz
+  buttonContainer.appendChild(submitButton)
+
+  const popupContainer = document.getElementById('quiz-container')
+  popupContainer.style.display = 'flex'
+  const closeButton = document.createElement('button')
+  closeButton.id = 'quiz-close'
+  closeButton.textContent = 'Close'
+  closeButton.onclick = () => {
+    popupContainer.style.display = 'none'
+    stopCountdown()
+  }
+  buttonContainer.appendChild(closeButton)
+  quizContainer.appendChild(buttonContainer)
+  quizContainer.style.display = 'flex'
+  quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+let timer
+function startCountdown(quizId, resetTimer = false) {
+  let timeLeft = resetTimer ? 600 : localStorage.getItem(`quizTime_${quizId}`) || 600
+
+  const timerElement = document.getElementById('quiz-timer')
+  if (!timerElement) {
+    const newTimerElement = document.createElement('div')
+    newTimerElement.id = 'quiz-timer'
+    newTimerElement.style.fontSize = '18px'
+    newTimerElement.style.fontWeight = 'bold'
+    newTimerElement.style.color = 'red'
+    document.getElementById('quiz-container').prepend(newTimerElement)
+  }
+
+  function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60)
+    const seconds = timeLeft % 60
+    document.getElementById('quiz-timer').textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
+
+  updateTimerDisplay()
+  clearInterval(timer)
+
+  timer = setInterval(() => {
+    timeLeft--
+    localStorage.setItem(`quizTime_${quizId}`, timeLeft)
+    updateTimerDisplay()
+
+    if (timeLeft <= 0) {
+      clearInterval(timer)
+      gradeQuiz()
+    }
+  }, 1000)
+}
+
+function stopCountdown() {
+  clearInterval(timer)
+
   quizContainer.appendChild(retryButton)
 
   const submitButton = document.createElement('button')
@@ -365,7 +487,7 @@ function viewSavedQuiz(index) {
   closeButton.id = 'quiz-popup-close'
   closeButton.textContent = 'Close'
   closeButton.onclick = () => {
-    popupContainer.style.display = "none"
+    popupContainer.style.display = 'none'
   }
   quizContainer.appendChild(closeButton)
 }
@@ -378,22 +500,44 @@ function deleteSavedQuiz(index) {
     const quizId = savedQuizzes[index].id
     savedQuizzes.splice(index, 1)
 
-    if (quizId && quizProgress[quizId]) {
+    if (quizId) {
       delete quizProgress[quizId]
-      localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
+      localStorage.removeItem(`quizTime_${quizId}`)
     }
-
+    const popupContainer = document.getElementById('quiz-container')
+    popupContainer.style.display = 'none'
     localStorage.setItem('quizQuestions', JSON.stringify(savedQuizzes))
+    localStorage.setItem('quizProgress', JSON.stringify(quizProgress))
   }
-
   displaySavedQuizzes(true)
 }
 
 function clearStorage() {
-  if (confirm('Are you sure?')) {
-    localStorage.removeItem('quizQuestions')
-    localStorage.removeItem('quizProgress')
+  const popup = document.getElementById('confirm-popup')
+  const popupContent = document.getElementById('popup-content')
+
+  popup.style.display = 'flex'
+  popupContent.innerHTML = `
+    <p>⚠ Are you sure you want to delete all saved quizzes?</p>
+    <button id="confirm-yes">Yes</button>
+    <button id="confirm-no">No</button>
+  `
+
+  document.getElementById('confirm-yes').onclick = function () {
+    localStorage.clear()
     displaySavedQuizzes()
+    popupContent.innerHTML = `
+      <p>✅ All saved quizzes and progress have been deleted.</p>
+      <button id="close-popup">OK</button>
+    `
+
+    document.getElementById('close-popup').onclick = function () {
+      popup.style.display = 'none'
+    }
+  }
+
+  document.getElementById('confirm-no').onclick = function () {
+    popup.style.display = 'none'
   }
 }
 
@@ -408,4 +552,5 @@ window.gradeQuiz = gradeQuiz
 window.viewSavedQuiz = viewSavedQuiz
 window.deleteSavedQuiz = deleteSavedQuiz
 window.clearStorage = clearStorage
-document.addEventListener("DOMContentLoaded", displaySavedQuizzes)
+window.stopCountdown = stopCountdown
+document.addEventListener('DOMContentLoaded', displaySavedQuizzes)
